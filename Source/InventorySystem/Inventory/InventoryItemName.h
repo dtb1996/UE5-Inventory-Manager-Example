@@ -8,9 +8,9 @@ UENUM(BlueprintType)
 enum class EInventoryItemName : uint8
 {
 	None,
-	Item_1,
-	Item_2,
-	Item_3,
-	Item_4,
-	Item_5,
+	Apple,
+	Bread,
+	Carrot,
+	Potato,
+	Steak,
 };
