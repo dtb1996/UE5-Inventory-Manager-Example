@@ -2,6 +2,7 @@
 
 
 #include "InventoryComponent.h"
+#include "InventoryFunctionLibrary.h"
 
 UInventoryComponent::UInventoryComponent()
 {
@@ -43,9 +44,9 @@ void UInventoryComponent::AddItem(const EInventoryItemName ItemName, const int32
 	}
 	else
 	{
-		FInventoryItemInfo NewItem;
-		NewItem.ItemName = ItemName;
-		NewItem.MaxStack = 99;
+		bool ItemInfoFound = false;
+		
+		FInventoryItemInfo NewItem = UInventoryFunctionLibrary::GetInventoryItemInfo(ItemName, ItemInfoFound);
 		NewItem.CurrentStack = FMath::Clamp(Quantity, 0, NewItem.MaxStack);
 
 		ItemIndex = InventoryItems.Add(NewItem);
