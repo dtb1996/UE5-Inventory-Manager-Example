@@ -8,50 +8,7 @@
 #include "InventoryItemName.h"
 #include "InventoryComponent.generated.h"
 
-USTRUCT(BlueprintType)
-struct FInventoryMapType
-{
-	GENERATED_BODY()
-
-	TMap<EInventoryItemName, int32> Map;
-
-	int32 Find(const EInventoryItemName ItemName) const
-	{
-		return *Map.Find(ItemName);
-	}
-
-	void SetQuantity(const EInventoryItemName Key, const int32 Quantity)
-	{
-		Map[Key] = Quantity;
-	}
-
-	bool Contains(const EInventoryItemName ItemName) const
-	{
-		return Map.Contains(ItemName);
-	}
-
-	int32 Add(const EInventoryItemName ItemName, const int32 Quantity)
-	{
-		return Map.Add(ItemName, Quantity);
-	}
-
-	int32 Remove(const EInventoryItemName ItemName)
-	{
-		return Map.Remove(ItemName);
-	}
-
-	void Empty()
-	{
-		Map.Empty();
-	}
-
-	TMap<EInventoryItemName, int32> GetItems() const
-	{
-		return Map;
-	}
-};
-
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FInventoryUpdatedSignature, const FInventoryMapType, NewInventoryItems);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FInventoryUpdatedSignature, const TArray<FInventoryItemInfo>, NewInventoryItems);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class INVENTORYSYSTEM_API UInventoryComponent : public UActorComponent
@@ -68,7 +25,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(BlueprintReadWrite)
-	FInventoryMapType InventoryMap;
+	TArray<FInventoryItemInfo> InventoryItems;
 
 public:	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
@@ -86,5 +43,5 @@ public:
 	const bool HasItem(const EInventoryItemName ItemName, int32& Quantity) const;
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-	const TMap<EInventoryItemName, int32> GetInventoryItems() const;
+	const TArray<FInventoryItemInfo> GetInventoryItems() const;
 };

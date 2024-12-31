@@ -21,132 +21,101 @@ void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 
 void UInventoryComponent::AddItem(const EInventoryItemName ItemName, const int32 Quantity)
 {
-	if (InventoryMap.Contains(ItemName))
+	int32 ItemIndex = 0;
+	FInventoryItemInfo FoundItem;
+	bool ItemFound = false;
+
+	for (int i = 0; i < InventoryItems.Num(); i++)
 	{
-		InventoryMap.SetQuantity(ItemName, InventoryMap.Find(ItemName) + Quantity); //TODO: check max quantity
-		//InventoryMap.Map[ItemName]
+		if ((ItemName == InventoryItems[i].ItemName) && (InventoryItems[i].CurrentStack < InventoryItems[i].MaxStack))
+		{
+			ItemIndex = i;
+			FoundItem = InventoryItems[i];
+			ItemFound = true;
+			break;
+		}
+	}
+
+	if (ItemFound)
+	{
+		FoundItem.CurrentStack = FMath::Clamp(FoundItem.CurrentStack + Quantity, 0, FoundItem.MaxStack);
+		InventoryItems[ItemIndex] = FoundItem;
 	}
 	else
 	{
-		InventoryMap.Add(ItemName, Quantity);
+		FInventoryItemInfo NewItem;
+		NewItem.ItemName = ItemName;
+		NewItem.MaxStack = 99;
+		NewItem.CurrentStack = FMath::Clamp(Quantity, 0, NewItem.MaxStack);
+
+		ItemIndex = InventoryItems.Add(NewItem);
+
+		InventoryItems[ItemIndex].ItemIndex = ItemIndex;
 	}
 
-	OnInventoryUpdatedDelegate.Broadcast(InventoryMap);
+	OnInventoryUpdatedDelegate.Broadcast(InventoryItems);
 }
-
-//void UInventoryComponent::AddItem(FInventoryItemInfo ItemInfo)
-//{
-//	int32 ItemIndex = 0;
-//	FInventoryItemInfo FoundItem;
-//	bool ItemFound = false;
-//
-//	for (int i = 0; i < InventoryItems.Num(); i++)
-//	{
-//		if ((ItemInfo.ItemName == InventoryItems[i].ItemName) && (InventoryItems[i].CurrentStack < ItemInfo.MaxStack))
-//		{
-//			ItemIndex = i;
-//			FoundItem = InventoryItems[i];
-//			ItemFound = true;
-//			break;
-//		}
-//	}
-//
-//	if (ItemFound)
-//	{
-//		FoundItem.CurrentStack = FoundItem.CurrentStack + ItemInfo.CurrentStack > FoundItem.MaxStack ? FoundItem.MaxStack : FoundItem.CurrentStack + ItemInfo.CurrentStack;
-//		InventoryItems[ItemIndex] = FoundItem;
-//	}
-//	else
-//	{
-//		ItemIndex = InventoryItems.Add(ItemInfo);
-//		InventoryItems[ItemIndex].ItemIndex = ItemIndex;
-//	}
-//
-//	OnInventoryUpdatedDelegate.Broadcast(InventoryItems);
-//}
 
 void UInventoryComponent::RemoveItem(const EInventoryItemName ItemName, const bool RemoveAll, const int32 QuantityToRemove, bool& Success)
 {
-	if (!InventoryMap.Contains(ItemName))
+	Success = false;
+	bool ItemFound = false;
+	int32 FoundItemIndex = 0;
+	FInventoryItemInfo FoundItem;
+
+	for (int i = 0; i < InventoryItems.Num(); i++)
 	{
-		Success = false;
+		FInventoryItemInfo CurrentItem = InventoryItems[i];
+
+		if (ItemName != CurrentItem.ItemName)
+		{
+			continue;
+		}
+
+		ItemFound = true;
+		FoundItemIndex = i;
+		FoundItem = CurrentItem;
+		break;
+	}
+
+	if (!ItemFound)
+	{
 		return;
 	}
 
 	if (RemoveAll)
 	{
-		InventoryMap.Remove(ItemName);
+		InventoryItems.RemoveAt(FoundItemIndex, EAllowShrinking::Yes);
 	}
 	else
 	{
-		int32 NewQuantity = FMath::Clamp(InventoryMap.Find(ItemName) - QuantityToRemove, 0, 99); //TODO: get max quantity
-		if (NewQuantity <= 0)
+		FoundItem.CurrentStack = FMath::Clamp(FoundItem.CurrentStack - QuantityToRemove, 0, FoundItem.MaxStack);
+		if (FoundItem.CurrentStack <= 0)
 		{
-			InventoryMap.Remove(ItemName);
+			InventoryItems.RemoveAt(FoundItemIndex, EAllowShrinking::Yes);
 		}
 		else
 		{
-			InventoryMap.SetQuantity(ItemName, NewQuantity);
+			InventoryItems[FoundItemIndex] = FoundItem;
 		}
 	}
 
-	OnInventoryUpdatedDelegate.Broadcast(InventoryMap);
+	OnInventoryUpdatedDelegate.Broadcast(InventoryItems);
 
 	Success = true;
 }
 
-//void UInventoryComponent::RemoveItem(EInventoryItemName ItemName, bool RemoveAll, int32 QuantityToRemove, bool& Success)
-//{
-//	for (int i = 0; i < InventoryItems.Num(); i++)
-//	{
-//		FInventoryItemInfo CurrentItem = InventoryItems[i];
-//		if (ItemName != CurrentItem.ItemName)
-//		{
-//			continue;
-//		}
-//
-//		if (!RemoveAll && !((FMath::Clamp(CurrentItem.CurrentStack - QuantityToRemove, 0, CurrentItem.MaxStack)) > 0))
-//		{
-//			CurrentItem.CurrentStack = FMath::Clamp(CurrentItem.CurrentStack - QuantityToRemove, 0, CurrentItem.MaxStack);
-//			if (CurrentItem.CurrentStack <= 0)
-//			{
-//				InventoryItems.RemoveAt(i);
-//			}
-//			else
-//			{
-//				InventoryItems[i] = CurrentItem;
-//			}
-//		}
-//		else
-//		{
-//			InventoryItems.RemoveAt(i, EAllowShrinking::Yes);
-//		}
-//
-//		OnInventoryUpdatedDelegate.Broadcast(InventoryItems);
-//
-//		Success = true;
-//		break;
-//	}
-//}
-
 void UInventoryComponent::ClearInventory()
 {
-	InventoryMap.Empty();
-	OnInventoryUpdatedDelegate.Broadcast(InventoryMap);
+	InventoryItems.Empty();
+	OnInventoryUpdatedDelegate.Broadcast(InventoryItems);
 }
 
 const bool UInventoryComponent::HasItem(const EInventoryItemName ItemName, int32& Quantity) const
 {
 	Quantity = 0;
 
-	if (InventoryMap.Contains(ItemName))
-	{
-		Quantity = InventoryMap.Find(ItemName);
-	}
-
-	return Quantity > 0;
-
-	/*for (const FInventoryItemInfo ItemInfo : InventoryItems)
+	for (const FInventoryItemInfo ItemInfo : InventoryItems)
 	{
 		if (ItemName == ItemInfo.ItemName)
 		{
@@ -155,12 +124,11 @@ const bool UInventoryComponent::HasItem(const EInventoryItemName ItemName, int32
 		}
 	}
 
-	return false;*/
+	return false;
 }
 
-const TMap<EInventoryItemName, int32> UInventoryComponent::GetInventoryItems() const
+const TArray<FInventoryItemInfo> UInventoryComponent::GetInventoryItems() const
 {
-	return InventoryMap.GetItems();
-	//return TMap<EInventoryItemName, int32>();
+	return InventoryItems;
 }
 
