@@ -24,27 +24,44 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-	UPROPERTY(BlueprintReadWrite)
 	TArray<FInventoryItemInfo> InventoryItems;
 
 public:	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	UFUNCTION(BlueprintCallable)
+	/**
+	* Adds an item to the inventory
+	*/
+	UFUNCTION(BlueprintCallable, Category = "Inventory Manager")
 	void AddItem(const EInventoryItemName ItemName, const int32 Quantity);
 
-	UFUNCTION(BlueprintCallable)
+	/**
+	* Removes an item from the inventory
+	*/
+	UFUNCTION(BlueprintCallable, Category = "Inventory Manager")
 	void RemoveItem(const EInventoryItemName ItemName, const bool RemoveAll, const int32 QuantityToRemove, bool& Success);
 
-	UFUNCTION(BlueprintCallable)
+	/**
+	* Removes all items from the inventory
+	*/
+	UFUNCTION(BlueprintCallable, Category = "Inventory Manager")
 	void ClearInventory();
 
-	UFUNCTION(BlueprintCallable, BlueprintPure)
+	/**
+	* Checks if the item is present in the inventory
+	*/
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Inventory Manager")
 	const bool HasItem(const EInventoryItemName ItemName, int32& Quantity) const;
 
-	UFUNCTION(BlueprintCallable, BlueprintPure)
+	/**
+	* Returns an array of all items in the inventory
+	*/
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Inventory Manager")
 	const TArray<FInventoryItemInfo> GetItems() const;
 
-	UFUNCTION(BlueprintCallable)
+	/**
+	* Sorts items in the inventory by item type
+	*/
+	UFUNCTION(BlueprintCallable, Category = "Inventory Manager")
 	void SortItemsByType();
 };

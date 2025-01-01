@@ -120,12 +120,11 @@ const bool UInventoryComponent::HasItem(const EInventoryItemName ItemName, int32
 	{
 		if (ItemName == ItemInfo.ItemName)
 		{
-			Quantity = ItemInfo.CurrentStack;
-			return Quantity > 0;
+			Quantity += ItemInfo.CurrentStack;
 		}
 	}
 
-	return false;
+	return Quantity > 0;
 }
 
 const TArray<FInventoryItemInfo> UInventoryComponent::GetItems() const
