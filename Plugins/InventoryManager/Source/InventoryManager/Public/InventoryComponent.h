@@ -43,5 +43,8 @@ public:
 	const bool HasItem(const EInventoryItemName ItemName, int32& Quantity) const;
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-	const TArray<FInventoryItemInfo> GetInventoryItems() const;
+	const TArray<FInventoryItemInfo> GetItems() const;
+
+	UFUNCTION(BlueprintCallable)
+	void SortItemsByType();
 };

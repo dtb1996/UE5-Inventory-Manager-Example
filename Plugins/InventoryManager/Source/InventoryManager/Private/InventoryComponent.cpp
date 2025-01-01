@@ -128,8 +128,27 @@ const bool UInventoryComponent::HasItem(const EInventoryItemName ItemName, int32
 	return false;
 }
 
-const TArray<FInventoryItemInfo> UInventoryComponent::GetInventoryItems() const
+const TArray<FInventoryItemInfo> UInventoryComponent::GetItems() const
 {
 	return InventoryItems;
+}
+
+void UInventoryComponent::SortItemsByType()
+{
+	TArray<FInventoryItemInfo> SortedInventory = TArray<FInventoryItemInfo>();
+	
+	for (EInventoryItemType ItemType : TEnumRange<EInventoryItemType>())
+	{
+		for (FInventoryItemInfo Item : InventoryItems)
+		{
+			if (Item.ItemType == ItemType)
+			{
+				SortedInventory.Add(Item);
+			}
+		}
+	}
+
+	InventoryItems = SortedInventory;
+	OnInventoryUpdatedDelegate.Broadcast(InventoryItems);
 }
 

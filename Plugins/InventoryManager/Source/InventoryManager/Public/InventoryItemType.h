@@ -13,4 +13,6 @@ enum class EInventoryItemType : uint8
 	Armor,
 	Crafting,
 	Special,
+	Count UMETA(Hidden)
 };
+ENUM_RANGE_BY_COUNT(EInventoryItemType, EInventoryItemType::Count);
