@@ -9,7 +9,7 @@
 #include "InventoryFunctionLibrary.generated.h"
 
 UCLASS()
-class INVENTORYSYSTEM_API UInventoryFunctionLibrary : public UBlueprintFunctionLibrary
+class INVENTORYMANAGER_API UInventoryFunctionLibrary : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 

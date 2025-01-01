@@ -3,7 +3,7 @@
 
 #include "InventoryFunctionLibrary.h"
 
-#define DATA_TABLE_PATH "/Game/ThirdPerson/Blueprints/Inventory/DT_Items.DT_Items"
+#define DATA_TABLE_PATH "/InventoryManager/Example/DT_ItemInfo.DT_ItemInfo"
 
 FInventoryItemInfo UInventoryFunctionLibrary::GetInventoryItemInfo(EInventoryItemName ItemName, bool& ItemFound)
 {

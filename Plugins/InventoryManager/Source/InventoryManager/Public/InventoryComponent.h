@@ -11,7 +11,7 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FInventoryUpdatedSignature, const TArray<FInventoryItemInfo>&, NewInventoryItems);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class INVENTORYSYSTEM_API UInventoryComponent : public UActorComponent
+class INVENTORYMANAGER_API UInventoryComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
