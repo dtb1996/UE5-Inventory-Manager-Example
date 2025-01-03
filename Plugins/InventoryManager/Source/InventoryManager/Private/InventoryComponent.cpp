@@ -1,4 +1,4 @@
-// Copyright 2024, Bit Gaming Studio. All Rights Reserved
+// Copyright 2025, Bit Gaming Studio. All Rights Reserved
 
 
 #include "InventoryComponent.h"
@@ -13,7 +13,6 @@ void UInventoryComponent::BeginPlay()
 {
 	Super::BeginPlay();	
 }
-
 
 void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {

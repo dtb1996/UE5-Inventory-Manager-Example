@@ -1,4 +1,4 @@
-// Copyright 2024, Bit Gaming Studio. All Rights Reserved
+// Copyright 2025, Bit Gaming Studio. All Rights Reserved
 
 
 #include "InventoryFunctionLibrary.h"
