@@ -17,7 +17,7 @@ FInventoryItemInfo UInventoryFunctionLibrary::GetInventoryItemInfo(EInventoryIte
 
 	if (!DT)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("QuestFunctionLibrary: DTPath not resolved, trying to load..."));
+		UE_LOG(LogTemp, Warning, TEXT("InventoryFunctionLibrary: DTPath not resolved, trying to load..."));
 
 		DT = Cast<UDataTable>(DTPath.TryLoad());
 	}
@@ -37,7 +37,7 @@ FInventoryItemInfo UInventoryFunctionLibrary::GetInventoryItemInfo(EInventoryIte
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("QuestFunctionLibrary: ItemData not found"));
+		UE_LOG(LogTemp, Warning, TEXT("InventoryFunctionLibrary: ItemData not found"));
 	}
 
 	return ItemInfo;
