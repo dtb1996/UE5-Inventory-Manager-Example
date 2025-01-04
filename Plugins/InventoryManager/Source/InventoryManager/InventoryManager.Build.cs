@@ -12,7 +12,6 @@ public class InventoryManager : ModuleRules
 			new string[]
 			{
 				"Core",
-				// ... add other public dependencies that you statically link with here ...
 			}
 			);
 			
@@ -23,7 +22,7 @@ public class InventoryManager : ModuleRules
 				"Engine",
 				"Slate",
 				"SlateCore",
-				// ... add private dependencies that you statically link with here ...	
+				"UMG"
 			}
 			);
 

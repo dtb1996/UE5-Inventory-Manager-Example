@@ -1,6 +1,5 @@
 // Copyright 2025, Bit Gaming Studio. All Rights Reserved
 
-
 #include "InventoryComponent.h"
 #include "InventoryFunctionLibrary.h"
 
@@ -40,6 +39,9 @@ void UInventoryComponent::AddItem(const EInventoryItemName ItemName, const int32
 	{
 		FoundItem.CurrentStack = FMath::Clamp(FoundItem.CurrentStack + Quantity, 0, FoundItem.MaxStack);
 		InventoryItems[ItemIndex] = FoundItem;
+
+		FoundItem.CurrentStack = FMath::Clamp(Quantity, 0, FoundItem.MaxStack);
+		OnItemAddedDelegate.Broadcast(FoundItem);
 	}
 	else
 	{
@@ -51,6 +53,8 @@ void UInventoryComponent::AddItem(const EInventoryItemName ItemName, const int32
 		ItemIndex = InventoryItems.Add(NewItem);
 
 		InventoryItems[ItemIndex].ItemIndex = ItemIndex;
+
+		OnItemAddedDelegate.Broadcast(NewItem);
 	}
 
 	OnInventoryUpdatedDelegate.Broadcast(InventoryItems);

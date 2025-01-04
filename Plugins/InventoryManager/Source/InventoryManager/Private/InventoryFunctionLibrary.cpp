@@ -1,6 +1,5 @@
 // Copyright 2025, Bit Gaming Studio. All Rights Reserved
 
-
 #include "InventoryFunctionLibrary.h"
 
 #define DATA_TABLE_PATH "/InventoryManager/Example/DT_ItemInfo.DT_ItemInfo"

@@ -9,6 +9,7 @@
 #include "InventoryComponent.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FInventoryUpdatedSignature, const TArray<FInventoryItemInfo>&, NewInventoryItems);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FItemAddedSignature, const FInventoryItemInfo&, NewInventoryItem);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class INVENTORYMANAGER_API UInventoryComponent : public UActorComponent
@@ -18,8 +19,11 @@ class INVENTORYMANAGER_API UInventoryComponent : public UActorComponent
 public:	
 	UInventoryComponent();
 
-	UPROPERTY(BlueprintAssignable, Category = "Inventory")
+	UPROPERTY(BlueprintAssignable, Category = "Inventory Manager")
 	FInventoryUpdatedSignature OnInventoryUpdatedDelegate;
+
+	UPROPERTY(BlueprintAssignable, Category = "Inventory Manager")
+	FItemAddedSignature OnItemAddedDelegate;
 
 protected:
 	virtual void BeginPlay() override;
