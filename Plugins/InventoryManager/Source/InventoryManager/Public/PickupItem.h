@@ -17,7 +17,7 @@ class INVENTORYMANAGER_API APickupItem : public AActor
 public:
 	APickupItem();
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (ExposeOnSpawn = true))
 	EInventoryItemName ItemName;
 
 	UPROPERTY(EditInstanceOnly, BlueprintReadOnly)

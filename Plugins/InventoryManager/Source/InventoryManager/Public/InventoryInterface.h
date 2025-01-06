@@ -18,4 +18,7 @@ class IInventoryInterface
 public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Inventory Manager")
 	bool PickupItem(FInventoryItemInfo ItemName);
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Inventory Manager")
+	void ItemSelected(FInventoryItemInfo ItemName);
 };
