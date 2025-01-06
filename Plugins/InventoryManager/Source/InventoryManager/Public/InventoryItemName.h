@@ -11,9 +11,7 @@ enum class EInventoryItemName : uint8
 	Apple,
 	Bread,
 	Carrot,
-	Potato,
-	Steak,
-	Boots,
-	Chestplate,
-	Helmet
+	Fish,
+	Mushroom,
+	Steak
 };
