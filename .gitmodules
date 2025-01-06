@@ -1,0 +1,3 @@
+[submodule "Plugins/InventoryManager"]
+	path = Plugins/InventoryManager
+	url = https://github.com/dtb1996/UE5-Inventory-Manager.git
