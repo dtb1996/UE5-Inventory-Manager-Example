@@ -11,7 +11,7 @@ struct FDialogEntry : public FTableRowBase
     GENERATED_BODY()
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    FName SpearkerName;
+    FText SpearkerName;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     FText DialogText;
