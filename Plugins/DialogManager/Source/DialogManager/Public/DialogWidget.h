@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "DialogEntry.h"
 #include "DialogWidget.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FConversationCompletedSignature);
@@ -23,6 +22,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UDataTable* DialogDataTable;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UDataTable* CharacterInfoDataTable;
 	
 protected:
 	virtual void NativeConstruct() override;

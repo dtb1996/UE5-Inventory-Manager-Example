@@ -3,6 +3,9 @@
 #include "DialogWidget.h"
 #include "Components/TextBlock.h"
 #include "Components/Button.h"
+#include "Components/Image.h"
+#include "DialogEntry.h"
+#include "DialogCharacterInfo.h"
 
 void UDialogWidget::NativeConstruct()
 {
@@ -18,6 +21,9 @@ void UDialogWidget::NativeConstruct()
 
 void UDialogWidget::GetNextLine(int32 LineId)
 {
+	FString SpeakerName;
+
+	// Lookup next dialog line
 	FString str = FString("000") + FString::FromInt(000 + LineId);
 	FName LineIdName = *str.Right(3);
 	FDialogEntry* DialogLine = DialogDataTable->FindRow<FDialogEntry>(LineIdName, "");
@@ -26,12 +32,31 @@ void UDialogWidget::GetNextLine(int32 LineId)
 	{
 		NextLineId = DialogLine->NextLineId;
 
-		SpeakerNameText->SetText(DialogLine->SpearkerName);
+		SpeakerName = UEnum::GetValueAsString(DialogLine->SpeakerName);
+		SpeakerName = SpeakerName.RightChop(SpeakerName.Find("::") + 2);
+
+		SpeakerNameText->SetText(FText::FromString(SpeakerName));
 		DialogText->SetText(DialogLine->DialogText);
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Dialog Manager: DataTable row not found"));
+		UE_LOG(LogTemp, Warning, TEXT("DialogWidget: DialogDataTable row not found"));
+	}
+
+	// Lookup character info
+	FName SpeakerRow = FName(SpeakerName);
+	FDialogCharacterInfo* SpeakerInfo = CharacterInfoDataTable->FindRow<FDialogCharacterInfo>(SpeakerRow, "");
+
+	if (SpeakerInfo)
+	{
+		if (SpeakerInfo->Portrait)
+		{
+			SpeakerPortrait->SetBrushFromTexture(SpeakerInfo->Portrait);
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("DialogWidget: CharacterInfoDataTable row not found"));
 	}
 }
 

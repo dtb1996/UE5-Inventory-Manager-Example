@@ -4,25 +4,19 @@
 
 #include "CoreMinimal.h"
 #include "DialogCharacterNames.h"
-#include "DialogEntry.generated.h"
+#include "DialogCharacterInfo.generated.h"
 
 USTRUCT(BlueprintType)
-struct FDialogEntry : public FTableRowBase
+struct FDialogCharacterInfo : public FTableRowBase
 {
     GENERATED_BODY()
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    EDialogCharacterNames SpeakerName;
+    EDialogCharacterNames Name;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    FText DialogText;
+    UTexture2D* Portrait;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    USoundBase* AudioClip;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    int32 NextLineId;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    TArray<FText> Responses;
+    FText Occupation;
 };
