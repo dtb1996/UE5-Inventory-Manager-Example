@@ -4,8 +4,8 @@
 #include "Components/TextBlock.h"
 #include "Components/Button.h"
 #include "Components/Image.h"
-#include "DialogEntry.h"
 #include "DialogCharacterInfo.h"
+#include "Kismet/GameplayStatics.h"
 
 void UDialogWidget::NativeConstruct()
 {
@@ -26,21 +26,27 @@ void UDialogWidget::GetNextLine(int32 LineId)
 	// Lookup next dialog line
 	FString str = FString("000") + FString::FromInt(000 + LineId);
 	FName LineIdName = *str.Right(3);
-	FDialogEntry* DialogLine = DialogDataTable->FindRow<FDialogEntry>(LineIdName, "");
+	DialogLineInfo = *DialogDataTable->FindRow<FDialogEntry>(LineIdName, "");
 
-	if (DialogLine)
+	if (DialogLineInfo.SpeakerName != EDialogCharacterNames::None)
 	{
-		NextLineId = DialogLine->NextLineId;
+		NextLineId = DialogLineInfo.DialogLine.NextLineId;
 
-		SpeakerName = UEnum::GetValueAsString(DialogLine->SpeakerName);
+		SpeakerName = UEnum::GetValueAsString(DialogLineInfo.SpeakerName);
 		SpeakerName = SpeakerName.RightChop(SpeakerName.Find("::") + 2);
 
 		SpeakerNameText->SetText(FText::FromString(SpeakerName));
-		DialogText->SetText(DialogLine->DialogText);
+
+		DialogText->SetText(DialogLineInfo.DialogLine.DialogText);
+
+		if (DialogLineInfo.AudioClip)
+		{
+			UGameplayStatics::PlaySound2D(GetWorld(), DialogLineInfo.AudioClip);
+		}
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("DialogWidget: DialogDataTable row not found"));
+		UE_LOG(LogTemp, Warning, TEXT("DialogWidget: DialogLineInfo row not found"));
 	}
 
 	// Lookup character info
@@ -65,6 +71,16 @@ void UDialogWidget::OnAdvanceButtonClicked()
 	if (NextLineId == -1)
 	{
 		OnConversationCompletedDelegate.Broadcast();
+		return;
+	}
+
+	if (!DialogLineInfo.Responses.IsEmpty())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("DialogWidget: found player responses"));
+		DisplayPlayerResponses(DialogLineInfo.Responses);
+
+		//NextLineId = DialogLineInfo.Responses[0].NextLineId;
+		return;
 	}
 
 	GetNextLine(NextLineId);

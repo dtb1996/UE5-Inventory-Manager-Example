@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "DialogCharacterNames.h"
+#include "DialogLine.h"
 #include "DialogEntry.generated.h"
 
 USTRUCT(BlueprintType)
@@ -15,14 +16,11 @@ struct FDialogEntry : public FTableRowBase
     EDialogCharacterNames SpeakerName;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    FText DialogText;
+    FDialogLine DialogLine;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     USoundBase* AudioClip;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    int32 NextLineId;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    TArray<FText> Responses;
+    TArray<FDialogLine> Responses;
 };

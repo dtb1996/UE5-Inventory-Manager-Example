@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "DialogEntry.h"
 #include "DialogWidget.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FConversationCompletedSignature);
@@ -35,6 +36,9 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void OnAdvanceButtonClicked();
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void DisplayPlayerResponses(const TArray<FDialogLine>& Responses);
+
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UTextBlock* DialogText;
 
@@ -49,4 +53,7 @@ protected:
 
 	UPROPERTY(BlueprintReadWrite)
 	int32 NextLineId;
+
+	UPROPERTY(BlueprintReadWrite)
+	FDialogEntry DialogLineInfo;
 };
