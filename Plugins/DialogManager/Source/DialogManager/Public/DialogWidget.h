@@ -64,6 +64,8 @@ protected:
 	UPROPERTY(BlueprintReadWrite)
 	FDialogEntry DialogLineInfo;
 
+	UAudioComponent* AudioComponent;
+
 private:
 	UFUNCTION()
 	void OnResponseConfirmed(const int32& LineId);

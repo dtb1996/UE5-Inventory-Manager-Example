@@ -49,6 +49,8 @@ void UDialogWidget::GetNextLine(int32 LineId)
 			}
 
 			AudioComponent = UGameplayStatics::SpawnSound2D(GetWorld(), DialogLineInfo.AudioClip);
+
+			//UGameplayStatics::PlaySound2D(GetWorld(), DialogLineInfo.AudioClip);
 		}
 	}
 	else
