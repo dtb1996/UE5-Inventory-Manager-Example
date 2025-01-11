@@ -4,6 +4,7 @@
 #include "Components/TextBlock.h"
 #include "Components/Button.h"
 #include "Components/Image.h"
+#include "Components/VerticalBox.h"
 #include "DialogCharacterInfo.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -76,12 +77,57 @@ void UDialogWidget::OnAdvanceButtonClicked()
 
 	if (!DialogLineInfo.Responses.IsEmpty())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("DialogWidget: found player responses"));
 		DisplayPlayerResponses(DialogLineInfo.Responses);
-
-		//NextLineId = DialogLineInfo.Responses[0].NextLineId;
 		return;
 	}
 
 	GetNextLine(NextLineId);
+}
+
+void UDialogWidget::DisplayPlayerResponses(const TArray<FDialogLine>& Responses)
+{
+	DialogText->SetText(FText());
+	
+	if (!PlayerResponseClass)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("DialogWidget: PlayerResponseClass not set"));
+
+		NextLineId = -1;
+
+		return;
+	}
+
+	AdvanceTextButton->SetVisibility(ESlateVisibility::Hidden);
+
+	for (const FDialogLine Response : Responses)
+	{
+		APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+
+		UDialogPlayerResponse* ResponseWidget = Cast<UDialogPlayerResponse>(CreateWidget<UUserWidget>(this, PlayerResponseClass));
+
+		ResponseWidget->SetResponseText(Response.DialogText);
+		ResponseWidget->SetNextLineId(Response.NextLineId);
+
+		ResponseWidget->OnResponseClickedDelegate.AddDynamic(this, &UDialogWidget::OnResponseConfirmed);
+
+		ResponsesVbox->AddChildToVerticalBox(ResponseWidget);
+	}
+}
+
+void UDialogWidget::OnResponseConfirmed(const int32& LineId)
+{
+	for (auto Response : ResponsesVbox->GetAllChildren())
+	{
+		UDialogPlayerResponse* ResponseWidget = Cast<UDialogPlayerResponse>(Response);
+
+		ResponseWidget->OnResponseClickedDelegate.RemoveDynamic(this, &UDialogWidget::OnResponseConfirmed);
+	}
+
+	ResponsesVbox->ClearChildren();
+
+	DialogLineInfo = FDialogEntry();
+
+	AdvanceTextButton->SetVisibility(ESlateVisibility::Visible);
+	AdvanceTextButton->SetFocus();
+	GetNextLine(LineId);
 }

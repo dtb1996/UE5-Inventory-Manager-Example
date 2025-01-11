@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "DialogEntry.h"
+#include "DialogPlayerResponse.h"
 #include "DialogWidget.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FConversationCompletedSignature);
@@ -21,6 +22,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, meta = (ExposeOnSpawn = true))
 	int32 FirstLineId;
 
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
+	TSubclassOf<class UDialogPlayerResponse> PlayerResponseClass;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UDataTable* DialogDataTable;
 
@@ -36,7 +40,7 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void OnAdvanceButtonClicked();
 
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintCallable)
 	void DisplayPlayerResponses(const TArray<FDialogLine>& Responses);
 
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
@@ -51,9 +55,16 @@ protected:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UButton* AdvanceTextButton;
 
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	class UVerticalBox* ResponsesVbox;
+
 	UPROPERTY(BlueprintReadWrite)
 	int32 NextLineId;
 
 	UPROPERTY(BlueprintReadWrite)
 	FDialogEntry DialogLineInfo;
+
+private:
+	UFUNCTION()
+	void OnResponseConfirmed(const int32& LineId);
 };
