@@ -34,13 +34,13 @@ public:
 protected:
 	virtual void NativeConstruct() override;
 
-	UFUNCTION(BlueprintCallable, Category = "Dialog Manager")
+	UFUNCTION(BlueprintCallable)
 	void GetNextLine(int32 LineId);
 
-	UFUNCTION(BlueprintCallable, Category = "Dialog Manager")
+	UFUNCTION(BlueprintCallable)
 	void OnAdvanceButtonClicked();
 
-	UFUNCTION(BlueprintCallable, Category = "Dialog Manager")
+	UFUNCTION(BlueprintCallable)
 	void DisplayPlayerResponses(const TArray<FDialogLine>& Responses);
 
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))

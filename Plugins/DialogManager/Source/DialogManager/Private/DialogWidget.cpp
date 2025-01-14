@@ -123,6 +123,11 @@ void UDialogWidget::DisplayPlayerResponses(const TArray<FDialogLine>& Responses)
 
 		ResponsesVbox->AddChildToVerticalBox(ResponseWidget);
 	}
+
+	if (ResponsesVbox->GetChildAt(0))
+	{
+		ResponsesVbox->GetChildAt(0)->SetFocus();
+	}
 }
 
 void UDialogWidget::OnResponseConfirmed(const int32& LineId)
