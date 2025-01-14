@@ -1,6 +1,6 @@
-# UE5 Inventory Manager Example Project
+# UE5 Inventory/Dialog Manager Example Project
 
-Simple demo project for the [UE5 Inventory Manager Plugin](https://github.com/dtb1996/UE5-Inventory-Manager)
+Simple demo project for the [UE5 Inventory Manager](https://github.com/dtb1996/UE5-Inventory-Manager) and [UE5 Dialog Manager](https://github.com/dtb1996/UE5-Dialog-Manager) plugins.
 
 ## Support
 [bitgamingstudio@gmail.com](mailto:bitgamingstudio@gmail.com)
